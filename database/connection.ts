@@ -1,9 +1,9 @@
 import knex from 'knex';
-import config from './knexfile';
+import config from '../knexfile';
 import dotenv from 'dotenv';
 
 dotenv.config();
-const db = knex(config.development);
+export const db = knex(config.development);
 
 export const connectDB =  async () => {
  try {
@@ -11,7 +11,5 @@ export const connectDB =  async () => {
   console.log('Connected to PostgreSQL');
  } catch (error) {
   console.log('Connection failed', error);
- } finally {
-  await db.destroy();
  }
 };
