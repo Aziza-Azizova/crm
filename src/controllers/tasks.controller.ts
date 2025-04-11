@@ -1,5 +1,4 @@
 import { Request, Response } from 'express';
-import { db } from '../../database/connection';
 import { TaskModel } from '../models/tasks.model';
 
 export async function createTask(req: Request, res: Response) {
