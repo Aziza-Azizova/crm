@@ -11,8 +11,8 @@ export class ProjectModel {
     return project;
   }
 
-  static async getProjectsWithFilters(filters: { total?: number; todo: number; in_progress?: number; done?: number; }) {
-    let query = db('projects')
+  static async getProjectsWithFilters(filters: { total?: number; todo?: number; in_progress?: number; done?: number; }) {
+    let query = db.from('projects')
     .leftJoin('tasks', 'projects.id', 'tasks.project_id')
     .select('projects.*',
       db.raw('COUNT(tasks.id) as total_tasks'),

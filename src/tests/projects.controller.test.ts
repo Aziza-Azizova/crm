@@ -4,7 +4,7 @@ import { factory } from 'factory-girl';
 import { expect } from 'chai';
 import { Project } from '../types/projects.type';
 import { ProjectModel } from '../models/projects.model';
-import { createProject, getProject } from '../controllers/projects.controller';
+import { createProject, getProject, getProjectsList } from '../controllers/projects.controller';
 import './factories/user.factory';
 import './factories/project.factory';
 
@@ -49,6 +49,25 @@ describe('Project controller', () => {
   expect((res.send as sinon.SinonStub).calledOnceWithExactly({
    message: 'Project successfully found',
    data: project,
+  })).to.be.true;
+ })
+
+ it('should fetch list of projects with filters', async () => {
+  const project: Project = await factory.attrs('project');
+  const req = { query: { total: 3, in_progress: 1}} as unknown as Request
+  const res = {
+   status: sinon.stub().returnsThis(),
+   send: sinon.stub()
+  } as unknown as Response;
+
+  sinon.stub(ProjectModel, 'getProjectsWithFilters').resolves([project]);
+
+  await getProjectsList(req, res);
+
+  expect((res.status as sinon.SinonStub).calledOnceWithExactly(200)).to.be.true;
+  expect((res.send as sinon.SinonStub).calledOnceWithExactly({
+   message: 'Projects successfully fetched',
+   data: [project],
   })).to.be.true;
  })
 })

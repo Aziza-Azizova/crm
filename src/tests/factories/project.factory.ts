@@ -9,3 +9,14 @@ factory.define('project', Object, {
  owner_id: () => chance.guid(),
  created_at: () => chance.date(),
 })
+
+factory.define('projects', Object, {
+ id: () => chance.guid(),
+ name: () => chance.name(),
+ owner_id: () => chance.guid(),
+ created_at: () => chance.date(),
+ total_tasks: '1',
+ todo_tasks: '0',
+ done_tasks: '0',
+ in_progress_tasks: '1',
+})

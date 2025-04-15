@@ -2,9 +2,10 @@ import { factory } from 'factory-girl';
 import sinon from 'sinon';
 import { expect } from 'chai';
 import { db } from '../../database/connection';
-import { Project } from '../types/projects.type';
+import { Filters, Project } from '../types/projects.type';
 import { ProjectModel } from '../models/projects.model';
 import './factories/project.factory';
+import './factories/filters.factory';
 
 
 describe('Projects Model', () => {
@@ -40,5 +41,23 @@ describe('Projects Model', () => {
   expect(res).to.be.deep.eq([project]);
   expect(res[0]).to.have.property('name');
   expect(res[0]).to.have.property('owner_id');
+ });
+
+ it('should get projects with filters', async () => {
+  const projects: Project[] = await factory.attrs('projects');
+  const filters: Filters = await factory.attrs('filters');
+
+  const queryStub = {
+   leftJoin: sinon.stub().returnsThis(),
+   select: sinon.stub().returnsThis(),
+   groupBy: sinon.stub().returnsThis(),
+   havingRaw: sinon.stub().returnsThis(),
+   then: sinon.stub().callsFake((cb) => cb(projects))
+  }
+  sinon.stub(db, 'from').returns(queryStub as any);
+
+  const res = await ProjectModel.getProjectsWithFilters(filters);
+
+  expect(res).to.be.deep.eq(projects);
  });
 })
