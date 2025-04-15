@@ -2,7 +2,7 @@ import { db } from "../../database/connection";
 import { TaskUpdate } from "../schemas/task.schema";
 
 export class TaskModel {
-  static async create(newTask: {title: string, status: string}){
+  static async create(newTask: {title: string, status: string, priority: number}){
   const task = await db.insert(newTask).returning('*').into('tasks');
   return task;
  }

@@ -45,3 +45,26 @@ export async function getProject(req: Request, res: Response) {
   });
  }
 } 
+
+export async function getProjectsList(req: Request, res: Response) {
+ try {
+  const {total, todo, in_progress, done } = req.query;
+
+  const projects = await ProjectModel.getProjectsWithFilters({total: Number(total), todo: Number(todo), in_progress: Number(in_progress), done: Number(done)});
+  if(!projects) {
+   res.status(404).send({ message: 'Projects Not Found'});
+   return;
+  }
+
+  res.status(200).send({
+   message: 'Projects successfully fetched',
+   data: projects
+  });
+
+ } catch (error) {
+  res.status(500).send({
+   message: 'Failed to get project',
+   error
+  });
+ }
+} 
